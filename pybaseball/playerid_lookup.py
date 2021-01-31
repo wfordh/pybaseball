@@ -21,14 +21,15 @@ def get_register_file():
 
 
 @cache.df_cache()
-def chadwick_register(save: bool = False) -> pd.DataFrame:
+def chadwick_register(save: bool = False, verbose: bool = True) -> pd.DataFrame:
     ''' Get the Chadwick register Database '''
 
     if os.path.exists(get_register_file()):
         table = pd.read_csv(get_register_file())
         return table
 
-    print('Gathering player lookup table. This may take a moment.')
+    if verbose:
+        print('Gathering player lookup table. This may take a moment.')
     s = requests.get(url).content
     mlb_only_cols = ['key_retro', 'key_bbref', 'key_fangraphs', 'mlb_played_first', 'mlb_played_last']
     cols_to_keep = ['name_last', 'name_first', 'key_mlbam'] + mlb_only_cols
